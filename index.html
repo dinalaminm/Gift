@@ -332,7 +332,7 @@
             margin: 0 auto;
             padding: 20px;
             min-height: 100vh;
-            padding-top: 140px; /* Space for fixed header */
+            padding-top: 140px;
         }
 
         .posts-header {
@@ -691,11 +691,9 @@
     <!-- Floating Hearts Background -->
     <div class="hearts-container" id="hearts-container"></div>
 
-    <!-- Background Music - Beautiful Romantic Piano -->
+    <!-- Background Music -->
     <audio id="bg-music" loop preload="auto">
         <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mp3">
-        <source src="https://cdn.pixabay.com/audio/2023/02/28/audio_df8033e229.mp3" type="audio/mp3">
-        <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c610232532.mp3" type="audio/mp3">
     </audio>
 
     <!-- Music Control -->
@@ -894,8 +892,51 @@
         let currentGiftId = null;
         let fetchedSettings = null;
         let isUploading = false;
-        let navigationHistory = ['welcome']; // Track navigation history
+        let navigationHistory = ['welcome'];
         let currentView = 'welcome';
+
+        // --- IMAGE COMPRESSION UTILITY ---
+        function compressImage(file, maxWidth = 1200, quality = 0.8) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        // Calculate new dimensions
+                        if (width > maxWidth) {
+                            height = (height * maxWidth) / width;
+                            width = maxWidth;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Convert to compressed base64
+                        canvas.toBlob((blob) => {
+                            const compressedReader = new FileReader();
+                            compressedReader.readAsDataURL(blob);
+                            compressedReader.onloadend = () => {
+                                const base64 = compressedReader.result;
+                                const sizeInKB = Math.round((base64.length * 3) / 4 / 1024);
+                                console.log(`ছবির সাইজ: ${sizeInKB} KB`);
+                                resolve(base64);
+                            };
+                        }, 'image/jpeg', quality);
+                    };
+                    img.onerror = reject;
+                };
+                reader.onerror = reject;
+            });
+        }
 
         // --- FLOATING HEARTS ---
         function createFloatingHearts() {
@@ -917,40 +958,33 @@
             }, 800);
         }
 
-        // --- IMPROVED SCROLL DETECTION ---
+        // --- SCROLL DETECTION ---
         let lastScrollTop = 0;
         let scrollTimeout;
-        const scrollThreshold = 100; // Minimum scroll distance to trigger hide
+        const scrollThreshold = 100;
 
         window.addEventListener('scroll', () => {
             const scrollBtn = document.getElementById('scroll-top-btn');
             const header = document.getElementById('posts-header');
             const currentScroll = window.scrollY;
             
-            // Show/hide scroll to top button
             if (currentScroll > 300) {
                 scrollBtn.style.display = 'flex';
             } else {
                 scrollBtn.style.display = 'none';
             }
             
-            // Improved header hide/show logic
             if (header && document.getElementById('posts-view').classList.contains('active')) {
-                // Clear existing timeout
                 clearTimeout(scrollTimeout);
                 
-                // Only hide header if scrolling down past threshold
                 if (currentScroll > lastScrollTop && currentScroll > scrollThreshold) {
-                    // Scrolling down
                     header.classList.remove('scroll-up');
                     header.classList.add('scroll-down');
                 } else if (currentScroll < lastScrollTop) {
-                    // Scrolling up
                     header.classList.remove('scroll-down');
                     header.classList.add('scroll-up');
                 }
                 
-                // Show header when at top
                 if (currentScroll < 50) {
                     header.classList.remove('scroll-down');
                     header.classList.add('scroll-up');
@@ -984,31 +1018,21 @@
             }
         }
 
-        // Auto-play music with user interaction
         function initMusicAutoplay() {
             const audio = document.getElementById('bg-music');
             const musicBtn = document.getElementById('music-btn');
             
-            audio.volume = 0.35; // Set volume to 35%
+            audio.volume = 0.35;
             
-            // Try to play immediately
             const tryPlay = () => {
                 audio.play().then(() => {
                     musicBtn.classList.add('playing');
-                    console.log("মিউজিক চালু হয়েছে");
                 }).catch(err => {
-                    console.log("অটো-প্লে ব্লক হয়েছে, ইউজার ইন্টারঅ্যাকশনের জন্য অপেক্ষা করছি...");
-                    
-                    // Setup one-time event listeners for user interaction
                     const playOnInteraction = () => {
                         audio.play().then(() => {
                             musicBtn.classList.add('playing');
-                            console.log("ইউজার ইন্টারঅ্যাকশনের পর মিউজিক চালু হয়েছে");
-                        }).catch(e => {
-                            console.log("মিউজিক প্লে করতে সমস্যা:", e);
-                        });
+                        }).catch(e => console.log("মিউজিক প্লে করতে সমস্যা:", e));
                         
-                        // Remove listeners after first successful play
                         document.removeEventListener('click', playOnInteraction);
                         document.removeEventListener('touchstart', playOnInteraction);
                         document.removeEventListener('scroll', playOnInteraction);
@@ -1020,7 +1044,6 @@
                 });
             };
             
-            // Small delay to ensure page is ready
             setTimeout(tryPlay, 500);
         }
 
@@ -1046,17 +1069,14 @@
             document.getElementById(viewId + '-view').classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Update navigation history
             if (addToHistory && currentView !== viewId) {
                 navigationHistory.push(viewId);
-                // Keep history reasonable size
                 if (navigationHistory.length > 10) {
                     navigationHistory.shift();
                 }
             }
             currentView = viewId;
             
-            // Reset header visibility when entering posts view
             if (viewId === 'posts') {
                 const header = document.getElementById('posts-header');
                 header.classList.remove('scroll-down');
@@ -1064,12 +1084,9 @@
             }
         }
 
-        // Handle browser back button
         window.addEventListener('popstate', function(event) {
             if (navigationHistory.length > 1) {
-                // Remove current view from history
                 navigationHistory.pop();
-                // Get previous view
                 const previousView = navigationHistory[navigationHistory.length - 1] || 'welcome';
                 navigateTo(previousView, false);
             } else {
@@ -1077,7 +1094,6 @@
             }
         });
 
-        // Push state when navigating
         function pushStateNavigation(viewId) {
             history.pushState({ view: viewId }, '', '');
             navigateTo(viewId);
@@ -1182,7 +1198,7 @@
                 }
             } catch (e) {
                 console.error(e);
-                alert("লোড করতে সমস্যা!");
+                alert("লোড করতে সমস্যা: " + e.message);
                 setLoading(false);
             }
         }
@@ -1197,12 +1213,12 @@
                 setLoading(false);
             } catch (e) {
                 console.error(e);
-                alert("মুছতে সমস্যা!");
+                alert("মুছতে সমস্যা: " + e.message);
                 setLoading(false);
             }
         }
 
-        // --- IMAGE UPLOAD ---
+        // --- IMAGE UPLOAD WITH COMPRESSION ---
         async function handleImageUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -1214,24 +1230,22 @@
 
             statusEl.style.display = 'block';
             statusEl.innerHTML = 'ছবি প্রসেস হচ্ছে... ⏳';
+            statusEl.style.color = "var(--text-muted)";
             addBtn.disabled = true;
             isUploading = true;
 
             try {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const dataURL = event.target.result;
-                    previewEl.src = dataURL;
-                    previewEl.style.display = 'block';
-                    urlInput.value = dataURL;
-                    
-                    statusEl.innerHTML = "✅ ছবি প্রস্তুত!";
-                    statusEl.style.color = "var(--primary)";
-                    addBtn.disabled = false;
-                    isUploading = false;
-                };
+                // Compress image before storing
+                const compressedDataURL = await compressImage(file, 1200, 0.75);
                 
-                reader.readAsDataURL(file);
+                previewEl.src = compressedDataURL;
+                previewEl.style.display = 'block';
+                urlInput.value = compressedDataURL;
+                
+                statusEl.innerHTML = "✅ ছবি প্রস্তুত!";
+                statusEl.style.color = "var(--primary)";
+                addBtn.disabled = false;
+                isUploading = false;
                 
             } catch (error) {
                 console.error("ছবি প্রসেস ব্যর্থ:", error);
@@ -1316,14 +1330,14 @@
             }
         }
 
-        // --- SAVE TO CLOUD ---
+        // --- SAVE TO CLOUD WITH RETRY & TIMEOUT ---
         async function saveToCloud() {
             if(memories.length === 0) { 
                 alert("অন্তত একটি পোস্ট যোগ করুন!"); 
                 return; 
             }
             if(!window.isFirebaseReady) { 
-                alert("ডাটাবেস প্রস্তুত নয়!"); 
+                alert("ডাটাবেস প্রস্তুত নয়! পেজ রিফ্রেশ করুন।"); 
                 return; 
             }
 
@@ -1341,33 +1355,70 @@
                 updatedAt: new Date().toISOString()
             };
 
-            try {
-                let docId = currentGiftId;
-                
-                if (currentGiftId) {
-                    await window.updateDoc(window.doc(window.db, "gifts", currentGiftId), payload);
-                } else {
-                    payload.createdAt = new Date().toISOString();
-                    const docRef = await window.addDoc(window.collection(window.db, "gifts"), payload);
-                    docId = docRef.id;
-                    currentGiftId = docId;
-                }
+            // Calculate total size
+            const payloadSize = JSON.stringify(payload).length;
+            const sizeInMB = (payloadSize / (1024 * 1024)).toFixed(2);
+            console.log(`Total payload size: ${sizeInMB} MB`);
 
-                saveToLocalHistory(docId, settings.recipient, payload.updatedAt);
-
-                const link = `${window.location.origin}${window.location.pathname}?id=${docId}`;
-                document.getElementById('share-link-output').value = link;
-                document.getElementById('share-modal').classList.remove('hidden');
-
-                launchConfetti();
-
-            } catch (error) {
-                console.error("সেভ করতে সমস্যা:", error);
-                alert("সেভ করতে ব্যর্থ!");
-            } finally {
+            if (payloadSize > 10 * 1024 * 1024) { // 10MB limit warning
+                alert("ডেটা খুব বড় হয়ে গেছে! কিছু ছবি কমিয়ে আবার চেষ্টা করুন।");
                 btn.disabled = false;
                 btn.innerHTML = '<span style="position: relative; z-index: 1;">💾 সংরক্ষণ করুন এবং লিংক পান</span>';
+                return;
             }
+
+            // Retry mechanism
+            let retries = 3;
+            let success = false;
+
+            while (retries > 0 && !success) {
+                try {
+                    // Set a timeout for the operation
+                    const timeoutPromise = new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('Timeout')), 30000) // 30 second timeout
+                    );
+
+                    let docId = currentGiftId;
+                    
+                    if (currentGiftId) {
+                        await Promise.race([
+                            window.updateDoc(window.doc(window.db, "gifts", currentGiftId), payload),
+                            timeoutPromise
+                        ]);
+                    } else {
+                        payload.createdAt = new Date().toISOString();
+                        const docRef = await Promise.race([
+                            window.addDoc(window.collection(window.db, "gifts"), payload),
+                            timeoutPromise
+                        ]);
+                        docId = docRef.id;
+                        currentGiftId = docId;
+                    }
+
+                    saveToLocalHistory(docId, settings.recipient, payload.updatedAt);
+
+                    const link = `${window.location.origin}${window.location.pathname}?id=${docId}`;
+                    document.getElementById('share-link-output').value = link;
+                    document.getElementById('share-modal').classList.remove('hidden');
+
+                    launchConfetti();
+                    success = true;
+
+                } catch (error) {
+                    retries--;
+                    console.error(`সেভ করতে সমস্যা (${3-retries}/3):`, error);
+                    
+                    if (retries > 0) {
+                        btn.innerHTML = `<span style="position: relative; z-index: 1;">🔄 পুনঃচেষ্টা করা হচ্ছে... (${3-retries}/3)</span>`;
+                        await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2s before retry
+                    } else {
+                        alert("সেভ করতে ব্যর্থ! নেটওয়ার্ক চেক করুন অথবা ছবির সংখ্যা কমিয়ে আবার চেষ্টা করুন।\n\nError: " + error.message);
+                    }
+                }
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<span style="position: relative; z-index: 1;">💾 সংরক্ষণ করুন এবং লিংক পান</span>';
         }
 
         // --- RECEIVER / POSTS VIEWER ---
@@ -1401,7 +1452,8 @@
                     } catch (e) {
                         console.error(e);
                         setLoading(false);
-                        alert("নেটওয়ার্ক সমস্যা!");
+                        alert("লোড করতে সমস্যা: " + e.message);
+                        navigateTo('welcome');
                     }
                 }
             }, 100);
@@ -1436,13 +1488,11 @@
             
             memories.sort((a,b) => new Date(a.date) - new Date(b.date));
             
-            // Create posts
             memories.forEach((memory, index) => {
                 const post = createPost(memory, index);
                 container.appendChild(post);
             });
             
-            // Add final post if final message exists
             if (fetchedSettings.finalMsg && fetchedSettings.finalMsg.trim()) {
                 const finalPost = createFinalPost();
                 container.appendChild(finalPost);
