@@ -199,6 +199,10 @@
             display: block;
         }
 
+        #login-view.active {
+            display: flex;
+        }
+
         @keyframes viewFadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -992,8 +996,8 @@
         // --- AUTHORIZED USERS DATABASE ---
         // আপনি এখানে অথরাইজড ইউজার যোগ করবেন
         const AUTHORIZED_USERS = {
-            "admin@gmail.com": "alamin123",
-            "user1@example.com": "User@123",
+            "admin@gmail.com": "Admin@123",
+            "root@gmail.com.com":"root@1234",
             // আরো ইউজার যোগ করুন...
         };
 
@@ -1278,8 +1282,22 @@
                 return;
             }
 
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId + '-view').classList.add('active');
+            // Remove active class from ALL views first
+            document.querySelectorAll('.view').forEach(v => {
+                v.classList.remove('active');
+                v.style.display = 'none';
+            });
+            
+            // Then activate the target view
+            const targetView = document.getElementById(viewId + '-view');
+            targetView.classList.add('active');
+            
+            if (viewId === 'login') {
+                targetView.style.display = 'flex';
+            } else {
+                targetView.style.display = 'block';
+            }
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
             if (addToHistory && currentView !== viewId) {
