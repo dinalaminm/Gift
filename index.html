@@ -1,30 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MemoryNest ✨ - Create Beautiful Memories</title>
+    <title>MemoryNest ✨ - সুন্দর স্মৃতির বই</title>
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
-            --primary: #ff4d6d;
-            --primary-light: #ff758f;
-            --primary-dark: #d63651;
-            --secondary: #590d22;
-            --accent: #ffd23f;
-            --bg-dark: #0a0118;
-            --bg-mid: #1a0b2e;
-            --bg-light: #2d1b4e;
+            --primary: #d4af37;
+            --primary-light: #f0d98e;
+            --primary-dark: #b8941f;
+            --secondary: #2c1810;
+            --accent: #8b4513;
+            --bg-dark: #0a0a0a;
+            --bg-mid: #1a1410;
+            --bg-light: #2d2520;
             --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-border: rgba(212, 175, 55, 0.2);
             --text-main: #ffffff;
-            --text-muted: #e0aaff;
-            --shadow-glow: 0 0 30px rgba(255, 77, 109, 0.4);
+            --text-muted: #d4af37;
+            --book-leather: linear-gradient(135deg, #5c3d2e 0%, #3d2817 50%, #2c1810 100%);
+            --book-page: #fefdfb;
+            --book-page-shadow: rgba(0, 0, 0, 0.2);
+            --book-text: #2c2416;
+            --book-gold: #d4af37;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -45,7 +49,7 @@
             50% { background-position: 100% 50%; }
         }
 
-        /* Particle Background */
+        /* Elegant Particles */
         .particles {
             position: fixed;
             top: 0;
@@ -63,6 +67,7 @@
             pointer-events: none;
             opacity: 0;
             animation: float-particle linear infinite;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.8) 0%, transparent 70%);
         }
 
         @keyframes float-particle {
@@ -70,43 +75,10 @@
                 transform: translateY(100vh) scale(0);
                 opacity: 0;
             }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.3; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.2; }
             100% { 
                 transform: translateY(-100vh) scale(1);
-                opacity: 0;
-            }
-        }
-
-        /* Floating Hearts */
-        .hearts-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .heart {
-            position: absolute;
-            bottom: -10vh;
-            color: rgba(255, 77, 109, 0.3);
-            animation: floatUp linear infinite;
-            text-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
-        }
-
-        @keyframes floatUp {
-            0% { 
-                transform: translateY(0) rotate(0deg) scale(0.5);
-                opacity: 0;
-            }
-            10% { opacity: 0.8; }
-            50% { opacity: 0.6; }
-            100% { 
-                transform: translateY(-120vh) rotate(360deg) scale(1.2);
                 opacity: 0;
             }
         }
@@ -132,12 +104,12 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
+            border-radius: 20px;
             padding: 30px;
             margin-bottom: 24px;
             box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.4),
-                inset 0 1px 1px rgba(255, 255, 255, 0.1);
+                0 8px 32px rgba(0, 0, 0, 0.6),
+                inset 0 1px 1px rgba(212, 175, 55, 0.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
@@ -150,7 +122,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
             transition: left 0.5s;
         }
 
@@ -161,29 +133,29 @@
         .glass-card:hover {
             transform: translateY(-4px);
             box-shadow: 
-                0 12px 40px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(255, 77, 109, 0.3),
-                inset 0 1px 1px rgba(255, 255, 255, 0.15);
+                0 12px 40px rgba(0, 0, 0, 0.7),
+                0 0 0 1px rgba(212, 175, 55, 0.3),
+                inset 0 1px 1px rgba(212, 175, 55, 0.15);
         }
 
         /* Buttons */
         .btn {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             border: none;
-            color: white;
+            color: var(--secondary);
             padding: 14px 32px;
             border-radius: 50px;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(255, 77, 109, 0.4);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             width: 100%;
             display: block;
             text-align: center;
             position: relative;
             overflow: hidden;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .btn::before {
@@ -206,7 +178,7 @@
 
         .btn:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 30px rgba(255, 77, 109, 0.6);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.6);
         }
 
         .btn:active {
@@ -221,20 +193,22 @@
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            color: var(--primary);
             margin-top: 12px;
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(212, 175, 55, 0.2);
+            border-color: var(--primary);
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #d00000 0%, #9d0208 100%);
-            box-shadow: 0 4px 15px rgba(208, 0, 0, 0.4);
+            background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
         }
 
         .btn-small {
@@ -250,9 +224,9 @@
             width: 100%;
             padding: 14px 18px;
             margin-bottom: 18px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
             color: white;
             font-family: 'Poppins', sans-serif;
             font-size: 0.95rem;
@@ -262,12 +236,12 @@
         input:focus, textarea:focus {
             outline: none;
             border-color: var(--primary);
-            background: rgba(0, 0, 0, 0.4);
-            box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.1);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
         }
 
         input::placeholder, textarea::placeholder {
-            color: rgba(224, 170, 255, 0.5);
+            color: rgba(212, 175, 55, 0.5);
         }
 
         /* View Management */
@@ -294,20 +268,20 @@
         /* Welcome Screen */
         .welcome-content {
             text-align: center;
-            padding-top: 25vh;
+            padding-top: 20vh;
         }
 
         .welcome-title {
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-weight: 900;
             margin-bottom: 16px;
-            background: linear-gradient(135deg, #fff 0%, var(--primary-light) 50%, var(--accent) 100%);
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--primary-light) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 0 4px 20px rgba(255, 77, 109, 0.3);
+            text-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
             animation: titlePulse 3s ease-in-out infinite;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
 
         @keyframes titlePulse {
@@ -316,11 +290,12 @@
         }
 
         .welcome-subtitle {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--text-muted);
             margin-bottom: 40px;
             font-weight: 300;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            font-family: 'Cormorant Garamond', serif;
         }
 
         /* Dashboard */
@@ -330,26 +305,27 @@
             align-items: center;
             background: rgba(0, 0, 0, 0.3);
             padding: 18px;
-            border-radius: 16px;
+            border-radius: 12px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.1);
             transition: all 0.3s ease;
         }
 
         .history-item:hover {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             border-color: var(--primary);
             transform: translateX(8px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
         }
 
         .history-info h4 {
             margin-bottom: 6px;
-            color: var(--primary-light);
+            color: var(--primary);
             font-weight: 600;
         }
 
         .history-info small {
-            color: #aaa;
+            color: #999;
             font-size: 0.8rem;
         }
 
@@ -360,27 +336,27 @@
 
         /* Image Upload Section */
         .upload-zone {
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.3);
             padding: 20px;
-            border-radius: 16px;
+            border-radius: 12px;
             margin-bottom: 20px;
-            border: 2px dashed rgba(255, 255, 255, 0.15);
+            border: 2px dashed rgba(212, 175, 55, 0.3);
             transition: all 0.3s ease;
         }
 
         .upload-zone:hover {
             border-color: var(--primary);
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.4);
         }
 
         .img-preview {
             width: 100%;
             max-height: 200px;
             object-fit: cover;
-            border-radius: 12px;
+            border-radius: 8px;
             margin: 12px 0;
             display: none;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             animation: imageZoom 0.5s ease;
         }
 
@@ -397,88 +373,445 @@
             display: none;
         }
 
-        /* Memory Preview */
+        /* Memory Preview - NO BUTTONS */
         .memory-item-preview {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.3);
             padding: 14px;
-            border-radius: 14px;
+            border-radius: 12px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.1);
             transition: all 0.3s ease;
         }
 
         .memory-item-preview:hover {
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.4);
             border-color: var(--primary);
             transform: translateX(6px);
         }
 
         .memory-preview-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
             object-fit: cover;
             border: 2px solid var(--primary);
-            margin-right: 12px;
+            margin-right: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
-        /* Timeline Styles */
-        .timeline-container {
+        /* ==================== 3D BOOK FLIP STYLES ==================== */
+        
+        .book-container {
+            perspective: 3000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
             position: relative;
-            padding: 30px 0;
         }
 
-        .timeline-container::before {
+        .book-wrapper {
+            position: relative;
+            width: 90vw;
+            max-width: 900px;
+            height: 85vh;
+            max-height: 650px;
+        }
+
+        /* Book Cover - Enhanced 3D Design */
+        .book-cover {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--book-leather);
+            border-radius: 12px;
+            box-shadow: 
+                0 30px 100px rgba(0, 0, 0, 0.9),
+                inset 0 2px 6px rgba(255, 255, 255, 0.1),
+                inset 0 -2px 6px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            text-align: center;
+            border: 4px solid var(--secondary);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 1s ease;
+        }
+
+        .book-cover.flipped {
+            transform: rotateY(-180deg);
+            pointer-events: none;
+        }
+
+        /* Leather texture */
+        .book-cover::after {
             content: '';
             position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.03) 2px,
+                    rgba(0, 0, 0, 0.03) 4px
+                ),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.03) 2px,
+                    rgba(0, 0, 0, 0.03) 4px
+                );
+            pointer-events: none;
+        }
+
+        /* Gold border */
+        .book-cover::before {
+            content: '';
+            position: absolute;
+            top: 25px;
             left: 25px;
+            right: 25px;
+            bottom: 25px;
+            border: 3px solid var(--book-gold);
+            border-radius: 8px;
+            pointer-events: none;
+            box-shadow: 
+                inset 0 0 20px rgba(212, 175, 55, 0.3),
+                0 0 20px rgba(212, 175, 55, 0.3);
+            z-index: 1;
+        }
+
+        /* Corner ornaments */
+        .corner-ornament {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--book-gold);
+            z-index: 2;
+        }
+
+        .corner-ornament.top-left {
+            top: 35px;
+            left: 35px;
+            border-right: none;
+            border-bottom: none;
+            border-radius: 4px 0 0 0;
+        }
+
+        .corner-ornament.top-right {
+            top: 35px;
+            right: 35px;
+            border-left: none;
+            border-bottom: none;
+            border-radius: 0 4px 0 0;
+        }
+
+        .corner-ornament.bottom-left {
+            bottom: 35px;
+            left: 35px;
+            border-right: none;
+            border-top: none;
+            border-radius: 0 0 0 4px;
+        }
+
+        .corner-ornament.bottom-right {
+            bottom: 35px;
+            right: 35px;
+            border-left: none;
+            border-top: none;
+            border-radius: 0 0 4px 0;
+        }
+
+        .book-cover-content {
+            position: relative;
+            z-index: 3;
+        }
+
+        .book-cover h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--book-gold);
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 30px rgba(212, 175, 55, 0.5);
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .book-cover p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: var(--primary-light);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            margin-bottom: 10px;
+        }
+
+        .book-cover-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            color: rgba(212, 175, 55, 0.8);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 30px;
+        }
+
+        .open-book-btn {
+            margin-top: 50px;
+            padding: 18px 50px;
+            background: linear-gradient(135deg, var(--book-gold) 0%, #f0d98e 100%);
+            color: var(--secondary);
+            border: 3px solid var(--book-gold);
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 
+                0 10px 30px rgba(212, 175, 55, 0.4),
+                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .open-book-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 15px 40px rgba(212, 175, 55, 0.6),
+                inset 0 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Book Pages with 3D Flip */
+        .book-pages {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            display: none;
+        }
+
+        .book-pages.active {
+            display: block;
+        }
+
+        .page-flip-container {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform-origin: left center;
+            left: 50%;
+        }
+
+        .page-flip-container.flipping {
+            transform: rotateY(-180deg);
+        }
+
+        /* Individual Page */
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--book-page);
+            box-shadow: 
+                0 3px 15px rgba(0, 0, 0, 0.3),
+                inset 0 0 30px rgba(139, 69, 19, 0.05);
+            padding: 50px 40px;
+            overflow-y: auto;
+            border: 1px solid rgba(139, 69, 19, 0.15);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .page-front {
+            transform: rotateY(0deg);
+            border-radius: 0 12px 12px 0;
+        }
+
+        .page-back {
+            transform: rotateY(180deg);
+            border-radius: 12px 0 0 12px;
+        }
+
+        /* Static left page */
+        .static-page {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            background: var(--book-page);
+            box-shadow: 
+                inset -5px 0 20px rgba(0, 0, 0, 0.15),
+                0 3px 15px rgba(0, 0, 0, 0.3);
+            padding: 50px 40px;
+            overflow-y: auto;
+            border: 1px solid rgba(139, 69, 19, 0.15);
+            border-radius: 12px 0 0 12px;
+            left: 0;
+        }
+
+        /* Page shadows */
+        .page::before {
+            content: '';
+            position: absolute;
             top: 0;
             bottom: 0;
-            width: 3px;
-            background: linear-gradient(
-                to bottom,
-                transparent,
-                var(--primary),
-                var(--primary-light),
-                var(--primary),
-                transparent
+            width: 40px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .page-front::before {
+            left: 0;
+            background: linear-gradient(90deg, 
+                rgba(0, 0, 0, 0.15) 0%,
+                rgba(0, 0, 0, 0.05) 50%,
+                transparent 100%
             );
-            box-shadow: 0 0 10px var(--primary);
         }
 
-        .memory-card {
-            margin-left: 60px;
-            position: relative;
-            opacity: 0;
-            transform: translateX(-40px);
-            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        .page-back::before {
+            right: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%,
+                rgba(0, 0, 0, 0.05) 50%,
+                rgba(0, 0, 0, 0.15) 100%
+            );
         }
 
-        .memory-card.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .memory-card::before {
-            content: '💖';
+        /* Page texture */
+        .page::after {
+            content: '';
             position: absolute;
-            left: -66px;
-            top: 24px;
-            background: var(--bg-mid);
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid var(--primary);
-            font-size: 16px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(139, 69, 19, 0.01) 2px,
+                    rgba(139, 69, 19, 0.01) 4px
+                );
+            pointer-events: none;
+        }
+
+        .page-content {
+            position: relative;
             z-index: 2;
-            box-shadow: 0 0 20px rgba(255, 77, 109, 0.6);
-            animation: heartBeat 2s ease-in-out infinite;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .page-image {
+            width: 100%;
+            max-height: 55%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 25px;
+            border: 3px solid var(--book-gold);
+        }
+
+        .page-decorative-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--book-gold), transparent);
+            margin: 15px auto;
+        }
+
+        .page-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--book-text);
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .page-date {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.95rem;
+            color: #8b6f47;
+            margin-bottom: 20px;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+
+        .page-message {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--book-text);
+            max-width: 90%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 25px;
+            font-size: 0.9rem;
+            color: #999;
+            font-style: italic;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .page-front .page-number {
+            right: 40px;
+        }
+
+        .page-back .page-number {
+            left: 40px;
+        }
+
+        /* Final Page */
+        .final-page {
+            background: linear-gradient(135deg, #fff9e6 0%, #f5e6d3 100%);
+        }
+
+        .final-page .page-content {
+            justify-content: center;
+        }
+
+        .final-page .page-title {
+            font-size: 2.8rem;
+            color: var(--accent);
+            margin-bottom: 40px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .final-page .page-message {
+            font-size: 1.4rem;
+            font-family: 'Dancing Script', cursive;
+            color: var(--book-text);
+            line-height: 2;
+        }
+
+        .final-heart {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-top: 30px;
+            animation: heartBeat 1.5s ease-in-out infinite;
         }
 
         @keyframes heartBeat {
@@ -486,65 +819,52 @@
             50% { transform: scale(1.1); }
         }
 
-        .memory-img {
-            width: 100%;
-            max-height: 350px;
-            object-fit: cover;
-            border-radius: 16px;
-            margin: 16px 0;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-            animation: floatImage 6s ease-in-out infinite;
+        /* Navigation Instructions */
+        .nav-hint {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            color: var(--book-gold);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 2px solid var(--book-gold);
+            font-size: 0.95rem;
+            z-index: 100;
+            animation: bounce 2s ease-in-out infinite;
+            display: none;
         }
 
-        @keyframes floatImage {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        .nav-hint.active {
+            display: block;
         }
 
-        .memory-date {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
         }
 
-        .memory-title {
-            font-size: 1.6rem;
-            margin-bottom: 12px;
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .memory-desc {
-            color: var(--text-muted);
+        /* Page Indicator */
+        .page-indicator {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            color: var(--book-gold);
+            padding: 12px 25px;
+            border-radius: 30px;
+            border: 2px solid var(--book-gold);
             font-size: 1rem;
-            line-height: 1.7;
+            font-weight: 600;
+            z-index: 100;
+            display: none;
         }
 
-        /* Final Message */
-        .final-message {
-            text-align: center;
-            padding: 60px 20px;
-            margin-top: 60px;
-        }
-
-        .final-message h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, #fff, var(--primary-light), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 30px;
-            animation: finalPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes finalPulse {
-            0%, 100% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.05); filter: brightness(1.2); }
+        .page-indicator.active {
+            display: block;
         }
 
         /* Modals */
@@ -556,7 +876,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(10px);
-            z-index: 100;
+            z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -565,7 +885,7 @@
 
         .modal-content {
             width: 90%;
-            max-width: 420px;
+            max-width: 450px;
             animation: modalPop 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -582,11 +902,11 @@
 
         /* Loading Spinner */
         .spinner {
-            border: 5px solid rgba(255, 255, 255, 0.1);
+            border: 5px solid rgba(212, 175, 55, 0.2);
             border-left-color: var(--primary);
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
         }
 
@@ -601,23 +921,23 @@
             bottom: 24px;
             right: 24px;
             z-index: 90;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             border: 2px solid var(--primary);
-            box-shadow: 0 4px 20px rgba(255, 77, 109, 0.4);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
             transition: all 0.3s ease;
         }
 
         .music-control:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 30px rgba(255, 77, 109, 0.6);
+            box-shadow: 0 6px 30px rgba(212, 175, 55, 0.6);
         }
 
         .music-pulse {
@@ -626,34 +946,35 @@
 
         @keyframes musicPulse {
             0% {
-                box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.7);
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
             }
             70% {
-                box-shadow: 0 0 0 15px rgba(255, 77, 109, 0);
+                box-shadow: 0 0 0 15px rgba(212, 175, 55, 0);
             }
             100% {
-                box-shadow: 0 0 0 0 rgba(255, 77, 109, 0);
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
             }
         }
 
         /* Utility Classes */
         .hidden { display: none !important; }
-
         .text-center { text-align: center; }
 
         .icon-btn {
             cursor: pointer;
             padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(212, 175, 55, 0.1);
             border-radius: 50%;
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid rgba(212, 175, 55, 0.3);
         }
 
         .icon-btn:hover {
             background: var(--primary);
+            color: var(--secondary);
             transform: scale(1.1);
         }
 
@@ -671,19 +992,73 @@
                 padding: 20px;
             }
 
-            .memory-card {
-                margin-left: 50px;
+            .book-wrapper {
+                max-height: 550px;
             }
 
-            .timeline-container::before {
-                left: 20px;
+            .book-cover h1 {
+                font-size: 2.2rem;
             }
 
-            .memory-card::before {
-                left: -56px;
-                width: 30px;
-                height: 30px;
-                font-size: 14px;
+            .book-cover p {
+                font-size: 1.3rem;
+            }
+
+            .corner-ornament {
+                width: 40px;
+                height: 40px;
+            }
+
+            .page, .static-page {
+                padding: 30px 20px;
+            }
+
+            .page-image {
+                max-height: 45%;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .page-message {
+                font-size: 0.95rem;
+            }
+
+            .nav-hint {
+                font-size: 0.85rem;
+                padding: 12px 20px;
+            }
+
+            .page-indicator {
+                top: 20px;
+                right: 20px;
+                font-size: 0.9rem;
+                padding: 10px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .book-wrapper {
+                width: 95vw;
+                max-height: 480px;
+            }
+
+            .page, .static-page {
+                padding: 20px 15px;
+            }
+
+            .page-title {
+                font-size: 1.3rem;
+            }
+
+            .page-message {
+                font-size: 0.9rem;
+            }
+
+            .open-book-btn {
+                padding: 14px 35px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -692,12 +1067,14 @@
     <!-- Particles -->
     <div class="particles" id="particles"></div>
 
-    <!-- Floating Hearts -->
-    <div class="hearts-container" id="hearts-bg"></div>
-
     <!-- Background Music -->
     <audio id="bg-music" loop>
         <source src="https://assets.mixkit.co/music/preview/mixkit-dreaming-big-31.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- Page Turn Sound Effect -->
+    <audio id="page-turn-sound">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-book-page-turn-3.mp3" type="audio/mp3">
     </audio>
 
     <!-- Music Control Button -->
@@ -708,7 +1085,7 @@
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="hidden">
         <div class="spinner"></div>
-        <p style="margin-top: 20px; font-size: 1.1rem;" id="loading-text">Loading...</p>
+        <p style="margin-top: 20px; font-size: 1.1rem; color: var(--primary);" id="loading-text">লোড হচ্ছে...</p>
     </div>
 
     <div class="app-container">
@@ -718,15 +1095,15 @@
             <div class="welcome-content">
                 <h1 class="welcome-title">MemoryNest</h1>
                 <p class="welcome-subtitle">
-                    ✨ Create Unlimited Memories<br>
-                    💝 Share Love Forever
+                    ✨ সুন্দর স্মৃতির বই তৈরি করুন<br>
+                    💝 সীমাহীন পৃষ্ঠা • সীমাহীন ভালোবাসা
                 </p>
-                <div class="glass-card" style="display: inline-block; width: 100%; max-width: 400px;">
+                <div class="glass-card" style="display: inline-block; width: 100%; max-width: 450px;">
                     <button class="btn" onclick="initCreateNew()">
-                        <span style="position: relative; z-index: 1;">🎁 Create New Gift</span>
+                        <span style="position: relative; z-index: 1;">🎁 নতুন গিফট বুক তৈরি করুন</span>
                     </button>
                     <button class="btn btn-secondary" onclick="showDashboard()">
-                        <span style="position: relative; z-index: 1;">📂 My Dashboard</span>
+                        <span style="position: relative; z-index: 1;">📂 আমার ড্যাশবোর্ড</span>
                     </button>
                 </div>
             </div>
@@ -736,16 +1113,16 @@
         <div id="dashboard-view" class="view">
             <div class="glass-card">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
-                    <h2>📚 My Created Gifts</h2>
+                    <h2>📚 তৈরিকৃত বই সমূহ</h2>
                     <button class="btn-small btn-secondary" onclick="navigateTo('welcome')">
-                        <i class="fas fa-home"></i> Home
+                        <i class="fas fa-home"></i> হোম
                     </button>
                 </div>
                 <div id="history-list">
                     <!-- History items will appear here -->
                 </div>
-                <p style="text-align:center; font-size:0.85rem; color:#888; margin-top:24px;">
-                    💡 History saved in your browser
+                <p style="text-align:center; font-size:0.85rem; color:#999; margin-top:24px;">
+                    💡 হিস্টরি আপনার ব্রাউজারে সংরক্ষিত
                 </p>
             </div>
         </div>
@@ -754,91 +1131,112 @@
         <div id="create-view" class="view">
             <div class="glass-card" style="display:flex; justify-content:space-between; align-items:center;">
                 <button class="btn-small btn-secondary" onclick="navigateTo('welcome')">
-                    <i class="fas fa-home"></i> Home
+                    <i class="fas fa-home"></i> হোম
                 </button>
-                <h3 id="editor-title" style="margin: 0;">✨ New Gift</h3>
+                <h3 id="editor-title" style="margin: 0; color: var(--primary);">✨ নতুন গিফট বুক</h3>
                 <button class="btn-small btn-secondary" onclick="showDashboard()">
-                    <i class="fas fa-history"></i> History
+                    <i class="fas fa-history"></i> হিস্টরি
                 </button>
             </div>
 
             <div class="glass-card">
-                <h3>1️⃣ Add a Memory</h3>
-                <input type="text" id="inp-title" placeholder="💭 Title (e.g., First Date)">
+                <h3 style="color: var(--primary); margin-bottom: 20px;">📝 নতুন পৃষ্ঠা যোগ করুন</h3>
+                <input type="text" id="inp-title" placeholder="💭 পৃষ্ঠার শিরোনাম (যেমন: আমাদের প্রথম দেখা)">
                 <input type="date" id="inp-date">
                 
                 <!-- Image Upload Section -->
                 <div class="upload-zone">
-                    <label style="display:block; margin-bottom:10px; font-weight:500;">
-                        📸 Upload Image
+                    <label style="display:block; margin-bottom:10px; font-weight:500; color: var(--primary);">
+                        📸 ছবি আপলোড করুন (আবশ্যক)
                     </label>
                     <input type="file" id="inp-file" accept="image/*" style="margin-bottom: 8px;">
                     <p class="upload-status" id="upload-status">
-                        Uploading... <span id="upload-progress">0%</span>
+                        প্রসেস হচ্ছে... <span id="upload-progress"></span>
                     </p>
                     <img id="img-preview" class="img-preview">
                     <input type="hidden" id="inp-img-url">
                 </div>
 
-                <textarea id="inp-desc" rows="4" placeholder="💌 Write a sweet message..."></textarea>
+                <textarea id="inp-desc" rows="4" placeholder="💌 এই পৃষ্ঠার জন্য আপনার বার্তা লিখুন..."></textarea>
                 
                 <button class="btn" id="btn-add-mem" onclick="addMemory()">
-                    <span style="position: relative; z-index: 1;">➕ Add to Timeline</span>
+                    <span style="position: relative; z-index: 1;">➕ বইয়ে পৃষ্ঠা যোগ করুন</span>
                 </button>
             </div>
 
             <div class="glass-card">
-                <h3>2️⃣ Review Memories</h3>
+                <h3 style="color: var(--primary); margin-bottom: 20px;">📖 বই প্রিভিউ (<span id="page-count">0</span> টি পৃষ্ঠা)</h3>
                 <div id="memories-list">
-                    <p style="text-align: center; color: rgba(255,255,255,0.3); padding: 30px;">
-                        No memories added yet
+                    <p style="text-align: center; color: rgba(212, 175, 55, 0.3); padding: 30px; font-style: italic;">
+                        এখনো কোনো পৃষ্ঠা যোগ করা হয়নি। আপনার সুন্দর বই তৈরি শুরু করুন! ✨
                     </p>
                 </div>
             </div>
 
             <div class="glass-card">
-                <h3>3️⃣ Final Settings</h3>
-                <input type="text" id="inp-recipient" placeholder="👤 Recipient Name">
-                <input type="text" id="inp-final-msg" placeholder="💖 Final Message (e.g., I Love You)">
-                <input type="password" id="inp-password" placeholder="🔒 Password (Optional)">
+                <h3 style="color: var(--primary); margin-bottom: 20px;">⚙️ বইয়ের সেটিংস</h3>
+                <input type="text" id="inp-recipient" placeholder="👤 প্রাপকের নাম (যেমন: আমার প্রিয়)">
+                <input type="text" id="inp-final-msg" placeholder="💖 শেষ বার্তা (যেমন: চিরকাল তোমার)">
+                <input type="password" id="inp-password" placeholder="🔒 পাসওয়ার্ড সুরক্ষা (ঐচ্ছিক)">
                 <div style="margin-top: 24px;">
                     <button class="btn" id="btn-save-cloud" onclick="saveToCloud()">
-                        <span style="position: relative; z-index: 1;">💾 Save & Generate Link</span>
+                        <span style="position: relative; z-index: 1;">💾 বই তৈরি করুন এবং লিংক জেনারেট করুন</span>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- VIEW 4: RECEIVER TIMELINE -->
-        <div id="timeline-view" class="view">
-            <div class="glass-card text-center" style="margin-bottom: 50px;">
-                <h1 id="receiver-name" style="font-size: 2.5rem; margin-bottom: 12px;">For You ❤️</h1>
-                <p style="font-size: 1.1rem; color: var(--text-muted);">Scroll down to relive our beautiful moments</p>
+        <!-- VIEW 4: BOOK VIEWER -->
+        <div id="book-view" class="view">
+            <div class="book-container">
+                <div class="book-wrapper" id="book-wrapper">
+                    <!-- Book Cover -->
+                    <div class="book-cover" id="book-cover">
+                        <div class="corner-ornament top-left"></div>
+                        <div class="corner-ornament top-right"></div>
+                        <div class="corner-ornament bottom-left"></div>
+                        <div class="corner-ornament bottom-right"></div>
+                        
+                        <div class="book-cover-content">
+                            <h1 id="book-title">আমাদের স্মৃতির বই</h1>
+                            <p id="book-subtitle">বিশেষ কারো জন্য</p>
+                            <div class="book-cover-subtitle">মূল্যবান মুহূর্তের সংগ্রহ</div>
+                            <button class="open-book-btn" onclick="openBook()">
+                                📖 বই খুলুন
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Book Pages -->
+                    <div class="book-pages" id="book-pages">
+                        <!-- Pages will be dynamically generated -->
+                    </div>
+                </div>
             </div>
-            <div class="timeline-container" id="timeline-render"></div>
-            <div class="final-message hidden" id="final-screen">
-                <h1 id="end-msg">Thank You For Being In My Life 💖</h1>
-                <button class="btn" style="width: auto; display: inline-block; margin-top: 30px; min-width: 200px;" onclick="replay()">
-                    <span style="position: relative; z-index: 1;">↺ Replay</span>
-                </button>
-                <br>
-                <button class="btn btn-secondary btn-small" style="margin-top:20px;" onclick="navigateTo('welcome')">
-                    Create Your Own
-                </button>
+
+            <!-- Navigation Hint -->
+            <div class="nav-hint" id="nav-hint">
+                ◀ স্ক্রল/সোয়াইপ করে পৃষ্ঠা উল্টান ▶
+            </div>
+
+            <!-- Page Indicator -->
+            <div class="page-indicator" id="page-indicator">
+                <i class="fas fa-book-open"></i>
+                <span id="current-page">1</span> / <span id="total-pages">1</span>
             </div>
         </div>
 
         <!-- PASSWORD MODAL -->
         <div id="password-modal" class="hidden">
             <div class="glass-card modal-content text-center">
-                <h2 style="margin-bottom: 20px;">🔒 Secured Gift</h2>
-                <p style="margin-bottom: 20px; color: var(--text-muted);">Enter the magic word to unlock</p>
-                <input type="password" id="unlock-pass" placeholder="Password">
+                <h2 style="margin-bottom: 20px; color: var(--primary);">🔒 সুরক্ষিত বই</h2>
+                <p style="margin-bottom: 20px; color: var(--text-muted);">এই মূল্যবান উপহার আনলক করতে পাসওয়ার্ড দিন</p>
+                <input type="password" id="unlock-pass" placeholder="পাসওয়ার্ড লিখুন">
                 <button class="btn" onclick="checkPassword()">
-                    <span style="position: relative; z-index: 1;">❤️ Unlock</span>
+                    <span style="position: relative; z-index: 1;">❤️ বই আনলক করুন</span>
                 </button>
-                <p id="pass-error" style="color: #ff4d6d; margin-top: 15px; display: none;">
-                    ❌ Wrong password!
+                <p id="pass-error" style="color: #c41e3a; margin-top: 15px; display: none;">
+                    ❌ ভুল পাসওয়ার্ড!
                 </p>
             </div>
         </div>
@@ -846,16 +1244,16 @@
         <!-- SHARE MODAL -->
         <div id="share-modal" class="hidden">
             <div class="glass-card modal-content text-center">
-                <h3 style="margin-bottom: 20px;">🎉 Successfully Saved!</h3>
+                <h3 style="margin-bottom: 20px; color: var(--primary);">🎉 বই সফলভাবে তৈরি হয়েছে!</h3>
                 <p style="margin-bottom: 15px; color: var(--text-muted);">
-                    Share this link with your loved one
+                    আপনার সুন্দর গিফট বুক খুলতে এই লিংক শেয়ার করুন
                 </p>
                 <textarea id="share-link-output" readonly style="font-size:0.85rem; height: 90px; word-break: break-all; resize: none;"></textarea>
                 <button class="btn" onclick="copyLink()">
-                    <span style="position: relative; z-index: 1;">📋 Copy Link</span>
+                    <span style="position: relative; z-index: 1;">📋 লিংক কপি করুন</span>
                 </button>
                 <button class="btn btn-secondary" onclick="closeShareModal()">
-                    <span style="position: relative; z-index: 1;">Close</span>
+                    <span style="position: relative; z-index: 1;">বন্ধ করুন</span>
                 </button>
             </div>
         </div>
@@ -890,20 +1288,18 @@
     </script>
 
     <script>
-        // ✨ GOOGLE APPS SCRIPT URL - আপনার Apps Script এর URL এখানে দিন
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJ_Ey4nnn05LIaVH-7awKNwVfnTMenfkynStLiyzZf1GOQ5ZYeA-O4iTpJ53UuDl4D/exec";
-
         // --- DATA STATE ---
         let memories = [];
         let settings = { recipient: "", finalMsg: "", password: "" };
         let currentGiftId = null;
         let fetchedSettings = null;
         let isUploading = false;
+        let currentPageIndex = 0;
+        let isFlipping = false;
 
         // --- INIT ---
         window.addEventListener('load', () => {
             createParticles();
-            generateHearts();
             
             const urlParams = new URLSearchParams(window.location.search);
             const giftId = urlParams.get('id');
@@ -920,30 +1316,15 @@
         // --- PARTICLES ---
         function createParticles() {
             const container = document.getElementById('particles');
-            for(let i = 0; i < 20; i++) {
+            for(let i = 0; i < 25; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 particle.style.left = Math.random() * 100 + '%';
-                particle.style.width = (Math.random() * 4 + 2) + 'px';
+                particle.style.width = (Math.random() * 3 + 1) + 'px';
                 particle.style.height = particle.style.width;
-                particle.style.background = `rgba(255, ${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 0.6)`;
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDuration = (Math.random() * 15 + 15) + 's';
                 particle.style.animationDelay = (Math.random() * 5) + 's';
                 container.appendChild(particle);
-            }
-        }
-
-        function generateHearts() {
-            const container = document.getElementById('hearts-bg');
-            for(let i = 0; i < 12; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'heart';
-                heart.innerHTML = '<i class="fas fa-heart"></i>';
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.fontSize = (Math.random() * 18 + 12) + 'px';
-                heart.style.animationDuration = (Math.random() * 8 + 8) + 's';
-                heart.style.animationDelay = (Math.random() * 5) + 's';
-                container.appendChild(heart);
             }
         }
 
@@ -983,15 +1364,15 @@
             container.innerHTML = "";
 
             if (history.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color:#888; padding: 30px;">No gifts created yet 📭</p>`;
+                container.innerHTML = `<p style="text-align:center; color:#999; padding: 30px;">এখনো কোনো বই তৈরি করা হয়নি 📭</p>`;
             } else {
                 history.reverse().forEach(item => {
                     const el = document.createElement('div');
                     el.className = 'history-item';
                     el.innerHTML = `
                         <div class="history-info">
-                            <h4>💝 To: ${item.recipient}</h4>
-                            <small>🆔 ${item.id.substring(0,12)}... | 📅 ${new Date(item.date).toLocaleDateString()}</small>
+                            <h4>💝 প্রাপক: ${item.recipient}</h4>
+                            <small>🆔 ${item.id.substring(0,12)}... | 📅 ${new Date(item.date).toLocaleDateString('bn-BD')}</small>
                         </div>
                         <div class="history-actions">
                             <button class="btn-small" onclick="loadGiftForEdit('${item.id}')">
@@ -1020,14 +1401,14 @@
             document.getElementById('inp-recipient').value = "";
             document.getElementById('inp-final-msg').value = "";
             document.getElementById('inp-password').value = "";
-            document.getElementById('editor-title').innerText = "✨ New Gift";
+            document.getElementById('editor-title').innerText = "✨ নতুন গিফট বুক";
             
             renderMemoriesList();
             navigateTo('create');
         }
 
         async function loadGiftForEdit(id) {
-            setLoading(true, "Loading gift data...");
+            setLoading(true, "বই লোড হচ্ছে...");
             try {
                 const docRef = window.doc(window.db, "gifts", id);
                 const docSnap = await window.getDoc(docRef);
@@ -1041,39 +1422,39 @@
                     document.getElementById('inp-recipient').value = settings.recipient;
                     document.getElementById('inp-final-msg').value = settings.finalMsg;
                     document.getElementById('inp-password').value = settings.password || "";
-                    document.getElementById('editor-title').innerText = "✏️ Edit Gift";
+                    document.getElementById('editor-title').innerText = "✏️ বই এডিট করুন";
 
                     renderMemoriesList();
                     setLoading(false);
                     navigateTo('create');
                 } else {
-                    alert("Gift not found!");
+                    alert("বই পাওয়া যায়নি!");
                     removeFromLocalHistory(id);
                     setLoading(false);
                 }
             } catch (e) {
                 console.error(e);
-                alert("Error loading gift!");
+                alert("বই লোড করতে সমস্যা হয়েছে!");
                 setLoading(false);
             }
         }
 
         async function deleteGift(id) {
-            if(!confirm("Are you sure you want to delete this gift forever? 😢")) return;
+            if(!confirm("এই বইটি চিরতরে মুছে ফেলবেন? এটি পূর্বাবস্থায় ফেরানো যাবে না! 😢")) return;
             
-            setLoading(true, "Deleting...");
+            setLoading(true, "মুছে ফেলা হচ্ছে...");
             try {
                 await window.deleteDoc(window.doc(window.db, "gifts", id));
                 removeFromLocalHistory(id);
                 setLoading(false);
             } catch (e) {
                 console.error(e);
-                alert("Error deleting: " + e.message);
+                alert("মুছতে সমস্যা হয়েছে: " + e.message);
                 setLoading(false);
             }
         }
 
-        // --- IMAGE UPLOAD - GOOGLE APPS SCRIPT ---
+        // --- IMAGE UPLOAD ---
         async function handleImageUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -1084,68 +1465,30 @@
             const addBtn = document.getElementById('btn-add-mem');
 
             statusEl.style.display = 'block';
-            statusEl.innerHTML = 'Uploading... ⏳';
+            statusEl.innerHTML = 'ছবি প্রসেস হচ্ছে... ⏳';
             addBtn.disabled = true;
             isUploading = true;
 
             try {
-                // File কে Base64 তে convert করা
                 const reader = new FileReader();
-                reader.onload = async function(event) {
-                    const base64Data = event.target.result.split(',')[1]; // "data:image/jpeg;base64," অংশ বাদ দিয়ে শুধু base64
-                    
-                    // Google Apps Script এ পাঠানো
-                    const response = await fetch(GOOGLE_SCRIPT_URL, {
-                        method: 'POST',
-                        mode: 'no-cors', // Important for Google Apps Script
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            file: base64Data,
-                            filename: file.name,
-                            mimeType: file.type
-                        })
-                    });
-
-                    // no-cors mode এ response read করা যায় না, তাই আমরা assume করছি success হয়েছে
-                    // একটি temporary URL তৈরি করছি preview এর জন্য
-                    const tempURL = URL.createObjectURL(file);
-                    previewEl.src = tempURL;
+                reader.onload = function(event) {
+                    const dataURL = event.target.result;
+                    previewEl.src = dataURL;
                     previewEl.style.display = 'block';
+                    urlInput.value = dataURL;
                     
-                    // Drive এর link format - আপনার folder ID দিয়ে customize করতে হবে
-                    const timestamp = new Date().getTime();
-                    const driveURL = `https://drive.google.com/uc?export=view&id=YOUR_FILE_ID_${timestamp}`;
-                    
-                    urlInput.value = tempURL; // Temporarily using blob URL
-                    statusEl.innerHTML = "✅ Upload Complete!";
-                    statusEl.style.color = "#4cc9f0";
-
-                    // Real Drive URL পেতে একটু সময় লাগবে। একটি বিকল্প পদ্ধতি:
-                    // আপনি Google Apps Script থেকে response return করতে পারেন
-                    // কিন্তু no-cors mode এ সেটা পড়া যাবে না
-                    // তাই আমরা একটি workaround ব্যবহার করছি
-                    
-                    setTimeout(async () => {
-                        try {
-                            // এখানে আপনি একটি GET request করতে পারেন যেটা file ID return করবে
-                            // অথবা আপনার script modify করে webhook/callback ব্যবহার করতে পারেন
-                            statusEl.innerHTML = "✅ Ready to use!";
-                        } catch (err) {
-                            console.log("Secondary check failed:", err);
-                        }
-                    }, 2000);
+                    statusEl.innerHTML = "✅ ছবি প্রস্তুত!";
+                    statusEl.style.color = "var(--primary)";
+                    addBtn.disabled = false;
+                    isUploading = false;
                 };
                 
                 reader.readAsDataURL(file);
                 
             } catch (error) {
-                console.error("Upload failed:", error);
-                statusEl.innerHTML = "❌ Upload Failed!";
-                statusEl.style.color = "#ff4d6d";
-                alert("Upload failed! Please check your Google Apps Script configuration.");
-            } finally {
+                console.error("ছবি প্রসেস ব্যর্থ:", error);
+                statusEl.innerHTML = "❌ প্রসেস ব্যর্থ হয়েছে!";
+                statusEl.style.color = "#c41e3a";
                 addBtn.disabled = false;
                 isUploading = false;
             }
@@ -1158,17 +1501,19 @@
             const desc = document.getElementById('inp-desc').value;
 
             if(!title || !date) { 
-                alert("Title and Date are required! ⚠️"); 
+                alert("শিরোনাম এবং তারিখ আবশ্যক! ⚠️"); 
                 return; 
+            }
+            if(!img) {
+                alert("এই পৃষ্ঠার জন্য একটি ছবি আপলোড করুন! 📸");
+                return;
             }
             if(isUploading) { 
-                alert("Wait for image to finish uploading... ⏳"); 
+                alert("ছবি প্রসেস হওয়ার জন্য অপেক্ষা করুন... ⏳"); 
                 return; 
             }
-            
-            const finalImg = img || "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500";
 
-            const memory = { id: Date.now(), title, date, img: finalImg, desc };
+            const memory = { id: Date.now(), title, date, img, desc };
             memories.push(memory);
             
             // Reset form
@@ -1181,15 +1526,21 @@
             document.getElementById('upload-status').style.display = 'none';
 
             renderMemoriesList();
+            
+            // Success feedback
+            launchConfetti();
         }
 
         function renderMemoriesList() {
             const container = document.getElementById('memories-list');
+            const pageCount = document.getElementById('page-count');
             container.innerHTML = "";
             memories.sort((a,b) => new Date(a.date) - new Date(b.date));
 
+            pageCount.textContent = memories.length;
+
             if(memories.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.3); padding: 30px;">No memories added yet 📭</p>';
+                container.innerHTML = '<p style="text-align: center; color: rgba(212, 175, 55, 0.3); padding: 30px; font-style: italic;">এখনো কোনো পৃষ্ঠা যোগ করা হয়নি। আপনার সুন্দর বই তৈরি শুরু করুন! ✨</p>';
                 return;
             }
 
@@ -1200,12 +1551,12 @@
                     <div style="display:flex; align-items:center;">
                         <img src="${mem.img}" class="memory-preview-img">
                         <div>
-                            <strong>${mem.title}</strong><br>
-                            <small style="color: #aaa;">📅 ${mem.date}</small>
+                            <strong style="color: var(--primary);">পৃষ্ঠা ${index + 1}: ${mem.title}</strong><br>
+                            <small style="color: #999;">📅 ${new Date(mem.date).toLocaleDateString('bn-BD')}</small>
                         </div>
                     </div>
                     <span class="icon-btn" onclick="removeMemory(${index})">
-                        <i class="fas fa-trash" style="color: #ff4d6d;"></i>
+                        <i class="fas fa-trash"></i>
                     </span>
                 `;
                 container.appendChild(div);
@@ -1213,7 +1564,7 @@
         }
 
         function removeMemory(index) {
-            if(confirm("Delete this memory? 🗑️")) {
+            if(confirm("এই পৃষ্ঠাটি বই থেকে মুছে ফেলবেন? 🗑️")) {
                 memories.splice(index, 1);
                 renderMemoriesList();
             }
@@ -1222,20 +1573,20 @@
         // --- SAVE TO CLOUD ---
         async function saveToCloud() {
             if(memories.length === 0) { 
-                alert("Add some memories first! 💭"); 
+                alert("বইয়ে অন্তত একটি পৃষ্ঠা যোগ করুন! 💭"); 
                 return; 
             }
             if(!window.isFirebaseReady) { 
-                alert("Database not ready! ⏳"); 
+                alert("ডাটাবেস প্রস্তুত নয়! অপেক্ষা করুন... ⏳"); 
                 return; 
             }
 
             const btn = document.getElementById('btn-save-cloud');
             btn.disabled = true;
-            btn.innerHTML = '<span style="position: relative; z-index: 1;">💾 Saving...</span>';
+            btn.innerHTML = '<span style="position: relative; z-index: 1;">💾 বই তৈরি হচ্ছে...</span>';
 
-            settings.recipient = document.getElementById('inp-recipient').value || "Someone Special";
-            settings.finalMsg = document.getElementById('inp-final-msg').value || "I Love You ❤️";
+            settings.recipient = document.getElementById('inp-recipient').value || "বিশেষ কেউ";
+            settings.finalMsg = document.getElementById('inp-final-msg').value || "চিরকাল আমার হৃদয়ে ❤️";
             settings.password = document.getElementById('inp-password').value || "";
 
             const payload = {
@@ -1262,21 +1613,20 @@
                 document.getElementById('share-link-output').value = link;
                 document.getElementById('share-modal').classList.remove('hidden');
 
-                // Confetti celebration
                 launchConfetti();
 
             } catch (error) {
-                console.error("Save error: ", error);
-                alert("Failed to save! Check internet connection. 🌐");
+                console.error("সেভ করতে সমস্যা: ", error);
+                alert("সেভ করতে ব্যর্থ! ইন্টারনেট সংযোগ চেক করুন। 🌐");
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<span style="position: relative; z-index: 1;">💾 Save & Generate Link</span>';
+                btn.innerHTML = '<span style="position: relative; z-index: 1;">💾 বই তৈরি করুন এবং লিংক জেনারেট করুন</span>';
             }
         }
 
-        // --- RECEIVER ---
+        // --- RECEIVER / BOOK VIEWER ---
         function loadGiftForReceiver(giftId) {
-            setLoading(true, "Opening gift...");
+            setLoading(true, "গিফট বুক খোলা হচ্ছে...");
             
             const checkFirebase = setInterval(async () => {
                 if (window.isFirebaseReady) {
@@ -1295,17 +1645,17 @@
                             if(fetchedSettings.password && fetchedSettings.password.trim() !== "") {
                                 document.getElementById('password-modal').classList.remove('hidden');
                             } else {
-                                startGiftExperience();
+                                startBookExperience();
                             }
                         } else {
                             setLoading(false);
-                            alert("Gift not found! 😢");
+                            alert("গিফট বুক পাওয়া যায়নি! 😢");
                             navigateTo('welcome');
                         }
                     } catch (e) {
                         console.error(e);
                         setLoading(false);
-                        alert("Network error! 🌐");
+                        alert("নেটওয়ার্ক সমস্যা! 🌐");
                     }
                 }
             }, 100);
@@ -1315,7 +1665,7 @@
             const input = document.getElementById('unlock-pass').value;
             if(input === fetchedSettings.password) {
                 document.getElementById('password-modal').classList.add('hidden');
-                startGiftExperience();
+                startBookExperience();
             } else {
                 document.getElementById('pass-error').style.display = 'block';
                 setTimeout(() => {
@@ -1324,68 +1674,268 @@
             }
         }
 
-        function startGiftExperience() {
-            navigateTo('timeline');
-            document.getElementById('receiver-name').innerText = `For ${fetchedSettings.recipient} ❤️`;
-            document.getElementById('end-msg').innerText = fetchedSettings.finalMsg;
+        function startBookExperience() {
+            navigateTo('book');
+            document.getElementById('book-title').innerText = fetchedSettings.recipient;
+            document.getElementById('book-subtitle').innerText = "ভালোবাসায় তৈরি একটি উপহার";
             document.getElementById('music-btn').classList.remove('hidden');
-            renderTimeline();
+            
+            generateBookPages();
             
             // Auto-play music
             const audio = document.getElementById('bg-music');
-            audio.volume = 0.4;
+            audio.volume = 0.25;
             document.body.addEventListener('click', function() {
                 if(audio.paused) {
                     audio.play().then(() => {
                         document.getElementById('music-btn').classList.add('music-pulse');
-                    }).catch(e => console.log("Audio play failed:", e));
+                    }).catch(e => console.log("অডিও প্লে ব্যর্থ:", e));
                 }
             }, { once: true });
         }
 
-        function renderTimeline() {
-            const container = document.getElementById('timeline-render');
-            container.innerHTML = "";
+        function generateBookPages() {
+            const pagesContainer = document.getElementById('book-pages');
+            pagesContainer.innerHTML = "";
             
-            memories.forEach((mem) => {
-                const dateObj = new Date(mem.date);
-                const dateStr = dateObj.toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                });
-                
-                const card = document.createElement('div');
-                card.className = 'glass-card memory-card';
-                card.innerHTML = `
-                    <span class="memory-date">📅 ${dateStr}</span>
-                    <h3 class="memory-title">${mem.title}</h3>
-                    <img src="${mem.img}" class="memory-img" alt="Memory">
-                    <p class="memory-desc">${mem.desc}</p>
-                `;
-                container.appendChild(card);
+            // Sort memories by date
+            memories.sort((a,b) => new Date(a.date) - new Date(b.date));
+            
+            // Create all pages
+            memories.forEach((memory, index) => {
+                const flipContainer = createFlipPage(memory, index);
+                pagesContainer.appendChild(flipContainer);
             });
             
-            setupObserver();
+            // Add final page
+            const finalFlipContainer = createFinalFlipPage(memories.length);
+            pagesContainer.appendChild(finalFlipContainer);
+            
+            updatePageIndicator();
         }
 
-        function setupObserver() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.2 });
+        function createFlipPage(memory, index) {
+            const container = document.createElement('div');
+            container.className = 'page-flip-container';
+            container.dataset.index = index;
+            
+            if (index === 0) {
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+            }
+            
+            // Front page (right side)
+            const frontPage = document.createElement('div');
+            frontPage.className = 'page page-front';
+            frontPage.innerHTML = createPageContent(memory, index + 1);
+            
+            // Back page (for next flip)
+            const backPage = document.createElement('div');
+            backPage.className = 'page page-back';
+            if (index + 1 < memories.length) {
+                backPage.innerHTML = createPageContent(memories[index + 1], index + 2);
+            } else {
+                backPage.innerHTML = createFinalPageContent(index + 2);
+            }
+            
+            container.appendChild(frontPage);
+            container.appendChild(backPage);
+            
+            return container;
+        }
 
-            document.querySelectorAll('.memory-card').forEach(card => {
-                observer.observe(card);
+        function createFinalFlipPage(index) {
+            const container = document.createElement('div');
+            container.className = 'page-flip-container';
+            container.dataset.index = index;
+            container.style.display = 'none';
+            
+            const frontPage = document.createElement('div');
+            frontPage.className = 'page page-front final-page';
+            frontPage.innerHTML = createFinalPageContent(index + 1);
+            
+            container.appendChild(frontPage);
+            
+            return container;
+        }
+
+        function createPageContent(memory, pageNum) {
+            const dateObj = new Date(memory.date);
+            const dateStr = dateObj.toLocaleDateString('bn-BD', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            return `
+                <div class="page-content">
+                    <div class="page-decorative-line"></div>
+                    <h3 class="page-title">${memory.title}</h3>
+                    <p class="page-date">${dateStr}</p>
+                    <img src="${memory.img}" class="page-image" alt="${memory.title}">
+                    <div class="page-decorative-line"></div>
+                    <p class="page-message">${memory.desc || ''}</p>
+                </div>
+                <div class="page-number">${pageNum}</div>
+            `;
+        }
+
+        function createFinalPageContent(pageNum) {
+            return `
+                <div class="page-content">
+                    <div class="page-decorative-line" style="width: 100px;"></div>
+                    <h3 class="page-title">${fetchedSettings.finalMsg}</h3>
+                    <p class="page-message">
+                        প্রতিটি সুন্দর মুহূর্তের জন্য ধন্যবাদ।<br><br>
+                        তুমি জীবনকে বাঁচার যোগ্য করে তোল।<br><br>
+                        এই স্মৃতিগুলো এমন সম্পদ<br>
+                        যা আমি চিরকাল লালন করব।
+                    </p>
+                    <div class="final-heart">💝</div>
+                    <div class="page-decorative-line" style="width: 100px; margin-top: 30px;"></div>
+                </div>
+                <div class="page-number">${pageNum}</div>
+            `;
+        }
+
+        function openBook() {
+            document.getElementById('book-cover').classList.add('flipped');
+            setTimeout(() => {
+                document.getElementById('book-cover').style.display = 'none';
+                document.getElementById('book-pages').classList.add('active');
+                document.getElementById('nav-hint').classList.add('active');
+                document.getElementById('page-indicator').classList.add('active');
+                setupPageNavigation();
+                launchConfetti();
+            }, 800);
+        }
+
+        function setupPageNavigation() {
+            const bookWrapper = document.getElementById('book-wrapper');
+            let startX = 0;
+            let scrollAccumulator = 0;
+            const scrollThreshold = 50;
+
+            // Wheel event for desktop
+            bookWrapper.addEventListener('wheel', (e) => {
+                if (isFlipping) return;
+                e.preventDefault();
+                
+                scrollAccumulator += e.deltaY;
+                
+                if (Math.abs(scrollAccumulator) >= scrollThreshold) {
+                    if (scrollAccumulator > 0) {
+                        nextPage();
+                    } else {
+                        prevPage();
+                    }
+                    scrollAccumulator = 0;
+                }
+            }, { passive: false });
+
+            // Touch events for mobile
+            bookWrapper.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
             });
 
-            setTimeout(() => { 
-                document.getElementById('final-screen').classList.remove('hidden');
+            bookWrapper.addEventListener('touchend', (e) => {
+                if (isFlipping) return;
+                const endX = e.changedTouches[0].clientX;
+                const diff = startX - endX;
+
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) {
+                        nextPage();
+                    } else {
+                        prevPage();
+                    }
+                }
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (!document.getElementById('book-view').classList.contains('active')) return;
+                if (isFlipping) return;
+                
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    nextPage();
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    prevPage();
+                }
+            });
+        }
+
+        function playPageTurnSound() {
+            const sound = document.getElementById('page-turn-sound');
+            sound.currentTime = 0;
+            sound.volume = 0.3;
+            sound.play().catch(e => console.log("সাউন্ড প্লে ব্যর্থ:", e));
+        }
+
+        function nextPage() {
+            if (isFlipping) return;
+            
+            const containers = document.querySelectorAll('.page-flip-container');
+            
+            if (currentPageIndex >= containers.length - 1) {
+                // Last page - show confetti
                 launchConfetti();
-            }, memories.length * 1000 + 2000);
+                return;
+            }
+            
+            isFlipping = true;
+            playPageTurnSound();
+            
+            const currentContainer = containers[currentPageIndex];
+            currentContainer.classList.add('flipping');
+            
+            setTimeout(() => {
+                currentContainer.style.display = 'none';
+                currentPageIndex++;
+                
+                if (currentPageIndex < containers.length) {
+                    const nextContainer = containers[currentPageIndex];
+                    nextContainer.style.display = 'block';
+                    nextContainer.classList.remove('flipping');
+                }
+                
+                updatePageIndicator();
+                isFlipping = false;
+                
+                // Show confetti on last page
+                if (currentPageIndex === containers.length - 1) {
+                    setTimeout(launchConfetti, 500);
+                }
+            }, 800);
+        }
+
+        function prevPage() {
+            if (isFlipping || currentPageIndex === 0) return;
+            
+            isFlipping = true;
+            playPageTurnSound();
+            
+            const containers = document.querySelectorAll('.page-flip-container');
+            const currentContainer = containers[currentPageIndex];
+            
+            currentPageIndex--;
+            const prevContainer = containers[currentPageIndex];
+            
+            currentContainer.style.display = 'none';
+            prevContainer.style.display = 'block';
+            prevContainer.classList.remove('flipping');
+            
+            setTimeout(() => {
+                updatePageIndicator();
+                isFlipping = false;
+            }, 100);
+        }
+
+        function updatePageIndicator() {
+            const containers = document.querySelectorAll('.page-flip-container');
+            document.getElementById('current-page').textContent = currentPageIndex + 1;
+            document.getElementById('total-pages').textContent = containers.length;
         }
 
         // --- UTILS ---
@@ -1395,10 +1945,10 @@
             copyText.setSelectionRange(0, 99999);
             
             navigator.clipboard.writeText(copyText.value).then(() => {
-                alert("Link Copied! 📋💝 Share it with your loved one!");
+                alert("লিংক কপি হয়েছে! 📋💝 আপনার প্রিয়জনের সাথে শেয়ার করুন!");
             }).catch(() => {
                 document.execCommand("copy");
-                alert("Link Copied! 📋💝");
+                alert("লিংক কপি হয়েছে! 📋💝");
             });
         }
 
@@ -1406,7 +1956,7 @@
             document.getElementById('share-modal').classList.add('hidden');
         }
 
-        function setLoading(show, text="Loading...") {
+        function setLoading(show, text="লোড হচ্ছে...") {
             const el = document.getElementById('loading-overlay');
             if(show) {
                 document.getElementById('loading-text').innerText = text;
@@ -1437,29 +1987,24 @@
 
             (function frame() {
                 confetti({
-                    particleCount: 5,
+                    particleCount: 4,
                     angle: 60,
                     spread: 55,
                     origin: { x: 0 },
-                    colors: ['#ff4d6d', '#ffccd5', '#ffd23f', '#e0aaff']
+                    colors: ['#d4af37', '#f0d98e', '#8b4513', '#ffd700']
                 });
                 confetti({
-                    particleCount: 5,
+                    particleCount: 4,
                     angle: 120,
                     spread: 55,
                     origin: { x: 1 },
-                    colors: ['#ff4d6d', '#ffccd5', '#ffd23f', '#e0aaff']
+                    colors: ['#d4af37', '#f0d98e', '#8b4513', '#ffd700']
                 });
                 
                 if (Date.now() < end) {
                     requestAnimationFrame(frame);
                 }
             }());
-        }
-
-        function replay() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(launchConfetti, 500);
         }
     </script>
 </body>
