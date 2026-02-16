@@ -235,6 +235,35 @@
             font-family: 'Cormorant Garamond', serif;
         }
 
+        /* Login View */
+        .login-content {
+            text-align: center;
+            padding-top: 20vh;
+        }
+
+        .login-icon {
+            font-size: 5rem;
+            margin-bottom: 30px;
+            animation: lockShake 2s ease-in-out infinite;
+        }
+
+        @keyframes lockShake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .auth-status {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
         /* Dashboard */
         .history-item {
             display: flex;
@@ -557,7 +586,7 @@
         }
 
         /* Modals */
-        #password-modal, #loading-overlay, #share-modal {
+        #password-modal, #loading-overlay, #share-modal, #admin-login-modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -618,6 +647,26 @@
             transform: scale(1.1);
         }
 
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            padding: 10px 20px;
+            background: rgba(196, 30, 58, 0.2);
+            border: 1px solid rgba(196, 30, 58, 0.5);
+            color: #ff6b6b;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(196, 30, 58, 0.4);
+            transform: scale(1.05);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .welcome-title {
@@ -674,6 +723,13 @@
             .scroll-top-btn {
                 right: 20px;
             }
+
+            .logout-btn {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 0.75rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -706,6 +762,11 @@
         <i class="fas fa-arrow-up"></i>
     </div>
 
+    <!-- Logout Button -->
+    <button class="logout-btn hidden" id="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> লগআউট
+    </button>
+
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="hidden">
         <div class="spinner"></div>
@@ -714,6 +775,30 @@
 
     <div class="app-container">
         
+        <!-- VIEW 0: LOGIN -->
+        <div id="login-view" class="view">
+            <div class="login-content">
+                <div class="login-icon">🔐</div>
+                <h1 class="welcome-title" style="font-size: 3rem;">অথেন্টিকেশন</h1>
+                <p class="welcome-subtitle">
+                    শুধুমাত্র অথরাইজড ইউজার অ্যাক্সেস করতে পারবে
+                </p>
+                <div class="glass-card" style="display: inline-block; width: 100%; max-width: 450px;">
+                    <input type="email" id="login-email" placeholder="📧 ইমেইল অ্যাড্রেস" style="margin-bottom: 15px;">
+                    <input type="password" id="login-password" placeholder="🔑 পাসওয়ার্ড">
+                    <button class="btn" onclick="handleLogin()">
+                        <span style="position: relative; z-index: 1;">🔓 লগইন করুন</span>
+                    </button>
+                    <p id="login-error" style="color: #ff6b6b; margin-top: 15px; display: none; text-align: center;">
+                        ❌ ভুল ইমেইল বা পাসওয়ার্ড!
+                    </p>
+                    <div class="auth-status" id="auth-status">
+                        <i class="fas fa-shield-alt"></i> সুরক্ষিত সিস্টেম
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- VIEW 1: WELCOME -->
         <div id="welcome-view" class="view">
             <div class="welcome-content">
@@ -886,14 +971,109 @@
     </script>
 
     <script>
+        // --- AUTHENTICATION STATE ---
+        let isAuthenticated = false;
+        let currentUser = null;
+
+        // --- AUTHORIZED USERS DATABASE ---
+        // আপনি এখানে অথরাইজড ইউজার যোগ করবেন
+        const AUTHORIZED_USERS = {
+            "admin@memorynest.com": "Admin@123",
+            "user1@example.com": "User@123",
+            // আরো ইউজার যোগ করুন...
+        };
+
         // --- DATA STATE ---
         let memories = [];
         let settings = { recipient: "", finalMsg: "", password: "" };
         let currentGiftId = null;
         let fetchedSettings = null;
         let isUploading = false;
-        let navigationHistory = ['welcome'];
-        let currentView = 'welcome';
+        let navigationHistory = ['login'];
+        let currentView = 'login';
+
+        // --- AUTHENTICATION FUNCTIONS ---
+        function checkAuthState() {
+            const authToken = sessionStorage.getItem('memoryNestAuth');
+            const userEmail = sessionStorage.getItem('memoryNestUser');
+            
+            if (authToken && userEmail) {
+                isAuthenticated = true;
+                currentUser = userEmail;
+                return true;
+            }
+            return false;
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errorEl = document.getElementById('login-error');
+
+            if (!email || !password) {
+                errorEl.textContent = "❌ ইমেইল এবং পাসওয়ার্ড দিন!";
+                errorEl.style.display = 'block';
+                setTimeout(() => errorEl.style.display = 'none', 3000);
+                return;
+            }
+
+            // চেক করুন ইউজার অথরাইজড কিনা
+            if (AUTHORIZED_USERS[email] && AUTHORIZED_USERS[email] === password) {
+                // লগইন সফল
+                isAuthenticated = true;
+                currentUser = email;
+                
+                sessionStorage.setItem('memoryNestAuth', 'authenticated');
+                sessionStorage.setItem('memoryNestUser', email);
+                
+                // লগআউট বাটন দেখান
+                document.getElementById('logout-btn').classList.remove('hidden');
+                
+                // স্বাগত স্ক্রিনে যান
+                launchConfetti();
+                setTimeout(() => {
+                    navigateTo('welcome');
+                }, 500);
+            } else {
+                // লগইন ব্যর্থ
+                errorEl.textContent = "❌ ভুল ইমেইল বা পাসওয়ার্ড!";
+                errorEl.style.display = 'block';
+                
+                // শেক এনিমেশন
+                const modal = errorEl.closest('.glass-card');
+                modal.style.animation = 'none';
+                setTimeout(() => {
+                    modal.style.animation = 'shake 0.5s ease';
+                }, 10);
+                
+                setTimeout(() => {
+                    errorEl.style.display = 'none';
+                    modal.style.animation = '';
+                }, 3000);
+            }
+        }
+
+        function logout() {
+            if (confirm("লগআউট করবেন?")) {
+                isAuthenticated = false;
+                currentUser = null;
+                sessionStorage.removeItem('memoryNestAuth');
+                sessionStorage.removeItem('memoryNestUser');
+                document.getElementById('logout-btn').classList.add('hidden');
+                navigateTo('login');
+            }
+        }
+
+        // শেক এনিমেশন
+        const shakeAnimation = document.createElement('style');
+        shakeAnimation.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(shakeAnimation);
 
         // --- IMAGE COMPRESSION UTILITY ---
         function compressImage(file, maxWidth = 1200, quality = 0.8) {
@@ -908,7 +1088,6 @@
                         let width = img.width;
                         let height = img.height;
 
-                        // Calculate new dimensions
                         if (width > maxWidth) {
                             height = (height * maxWidth) / width;
                             width = maxWidth;
@@ -920,7 +1099,6 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        // Convert to compressed base64
                         canvas.toBlob((blob) => {
                             const compressedReader = new FileReader();
                             compressedReader.readAsDataURL(blob);
@@ -1055,16 +1233,37 @@
             const giftId = urlParams.get('id');
 
             if (giftId) {
+                // যদি লিংক দিয়ে আসে তাহলে সরাসরি দেখাবে (লগইন লাগবে না)
                 loadGiftForReceiver(giftId);
             } else {
-                navigateTo('welcome');
+                // অন্যথায় অথেন্টিকেশন চেক করুন
+                if (checkAuthState()) {
+                    document.getElementById('logout-btn').classList.remove('hidden');
+                    navigateTo('welcome');
+                } else {
+                    navigateTo('login');
+                }
             }
 
             document.getElementById('inp-file').addEventListener('change', handleImageUpload);
+            
+            // এন্টার কী দিয়ে লগইন
+            document.getElementById('login-password').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleLogin();
+                }
+            });
         });
 
         // --- NAVIGATION ---
         function navigateTo(viewId, addToHistory = true) {
+            // অথরাইজড ভিউতে যাওয়ার আগে চেক করুন
+            if (['welcome', 'dashboard', 'create'].includes(viewId) && !isAuthenticated) {
+                alert("অ্যাক্সেস অস্বীকৃত! লগইন করুন।");
+                navigateTo('login', false);
+                return;
+            }
+
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId + '-view').classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1087,10 +1286,10 @@
         window.addEventListener('popstate', function(event) {
             if (navigationHistory.length > 1) {
                 navigationHistory.pop();
-                const previousView = navigationHistory[navigationHistory.length - 1] || 'welcome';
+                const previousView = navigationHistory[navigationHistory.length - 1] || 'login';
                 navigateTo(previousView, false);
             } else {
-                navigateTo('welcome', false);
+                navigateTo('login', false);
             }
         });
 
@@ -1101,10 +1300,12 @@
 
         // --- HISTORY ---
         function getLocalHistory() {
+            if (!isAuthenticated) return [];
             return JSON.parse(localStorage.getItem('memoryNest_history') || '[]');
         }
 
         function saveToLocalHistory(id, recipient, date) {
+            if (!isAuthenticated) return;
             let history = getLocalHistory();
             const existingIndex = history.findIndex(h => h.id === id);
             if (existingIndex > -1) {
@@ -1116,6 +1317,7 @@
         }
 
         function removeFromLocalHistory(id) {
+            if (!isAuthenticated) return;
             let history = getLocalHistory();
             history = history.filter(h => h.id !== id);
             localStorage.setItem('memoryNest_history', JSON.stringify(history));
@@ -1123,6 +1325,12 @@
         }
 
         function showDashboard() {
+            if (!isAuthenticated) {
+                alert("অ্যাক্সেস অস্বীকৃত!");
+                navigateTo('login');
+                return;
+            }
+
             const history = getLocalHistory();
             const container = document.getElementById('history-list');
             container.innerHTML = "";
@@ -1158,6 +1366,12 @@
 
         // --- CREATOR ---
         function initCreateNew() {
+            if (!isAuthenticated) {
+                alert("অ্যাক্সেস অস্বীকৃত!");
+                navigateTo('login');
+                return;
+            }
+
             currentGiftId = null;
             memories = [];
             settings = { recipient: "", finalMsg: "", password: "" };
@@ -1172,6 +1386,12 @@
         }
 
         async function loadGiftForEdit(id) {
+            if (!isAuthenticated) {
+                alert("অ্যাক্সেস অস্বীকৃত!");
+                navigateTo('login');
+                return;
+            }
+
             setLoading(true, "লোড হচ্ছে...");
             try {
                 const docRef = window.doc(window.db, "gifts", id);
@@ -1204,6 +1424,11 @@
         }
 
         async function deleteGift(id) {
+            if (!isAuthenticated) {
+                alert("অ্যাক্সেস অস্বীকৃত!");
+                return;
+            }
+
             if(!confirm("মুছে ফেলবেন?")) return;
             
             setLoading(true, "মুছে ফেলা হচ্ছে...");
@@ -1235,7 +1460,6 @@
             isUploading = true;
 
             try {
-                // Compress image before storing
                 const compressedDataURL = await compressImage(file, 1200, 0.75);
                 
                 previewEl.src = compressedDataURL;
@@ -1278,7 +1502,6 @@
             const memory = { id: Date.now(), title, date, img, desc };
             memories.push(memory);
             
-            // Reset form
             document.getElementById('inp-title').value = "";
             document.getElementById('inp-date').value = "";
             document.getElementById('inp-file').value = "";
@@ -1332,6 +1555,12 @@
 
         // --- SAVE TO CLOUD WITH RETRY & TIMEOUT ---
         async function saveToCloud() {
+            if (!isAuthenticated) {
+                alert("অ্যাক্সেস অস্বীকৃত!");
+                navigateTo('login');
+                return;
+            }
+
             if(memories.length === 0) { 
                 alert("অন্তত একটি পোস্ট যোগ করুন!"); 
                 return; 
@@ -1352,30 +1581,28 @@
             const payload = {
                 memories: memories,
                 settings: settings,
-                updatedAt: new Date().toISOString()
+                updatedAt: new Date().toISOString(),
+                createdBy: currentUser
             };
 
-            // Calculate total size
             const payloadSize = JSON.stringify(payload).length;
             const sizeInMB = (payloadSize / (1024 * 1024)).toFixed(2);
             console.log(`Total payload size: ${sizeInMB} MB`);
 
-            if (payloadSize > 10 * 1024 * 1024) { // 10MB limit warning
+            if (payloadSize > 10 * 1024 * 1024) {
                 alert("ডেটা খুব বড় হয়ে গেছে! কিছু ছবি কমিয়ে আবার চেষ্টা করুন।");
                 btn.disabled = false;
                 btn.innerHTML = '<span style="position: relative; z-index: 1;">💾 সংরক্ষণ করুন এবং লিংক পান</span>';
                 return;
             }
 
-            // Retry mechanism
             let retries = 3;
             let success = false;
 
             while (retries > 0 && !success) {
                 try {
-                    // Set a timeout for the operation
                     const timeoutPromise = new Promise((_, reject) => 
-                        setTimeout(() => reject(new Error('Timeout')), 30000) // 30 second timeout
+                        setTimeout(() => reject(new Error('Timeout')), 30000)
                     );
 
                     let docId = currentGiftId;
@@ -1410,7 +1637,7 @@
                     
                     if (retries > 0) {
                         btn.innerHTML = `<span style="position: relative; z-index: 1;">🔄 পুনঃচেষ্টা করা হচ্ছে... (${3-retries}/3)</span>`;
-                        await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2s before retry
+                        await new Promise(resolve => setTimeout(resolve, 2000));
                     } else {
                         alert("সেভ করতে ব্যর্থ! নেটওয়ার্ক চেক করুন অথবা ছবির সংখ্যা কমিয়ে আবার চেষ্টা করুন।\n\nError: " + error.message);
                     }
@@ -1447,13 +1674,13 @@
                         } else {
                             setLoading(false);
                             alert("মেমরি পাওয়া যায়নি!");
-                            navigateTo('welcome');
+                            navigateTo('login');
                         }
                     } catch (e) {
                         console.error(e);
                         setLoading(false);
                         alert("লোড করতে সমস্যা: " + e.message);
-                        navigateTo('welcome');
+                        navigateTo('login');
                     }
                 }
             }, 100);
